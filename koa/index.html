@@ -16,8 +16,9 @@
         <div id="app">
             <div>{{name}} : {{age}}</div>
             <button @click="getTokens">getTokens</button>
-            <button @click="getFollowers">getFollowers</button>
-            <button @click="getOAuth">getOAuth</button>
+            <button @click="setTokens">setTokens</button>
+            <button @click="noAPI">noAPI</button>
+            <button @click="redirect">redirect</button>
         </div>
         <script>
             var app = new Vue({
@@ -33,12 +34,20 @@
                         const res = await axios.get(`/getTokens`);
                         console.log('res', res);
                     },
-                    async getFollowers() {
-                        const res = await axios.get(`/getFollowers`);
+                    async setTokens() {
+                        const res = await axios.post(`/setTokens`);
                         console.log('res', res);
                     },
-                    async getOAuth() {
-                        const res = await axios.get(`/wechat`);
+                    async redirect() {
+                        const res = await axios.get(`/redirect`);
+                        console.log('res', res);
+                    },
+                    async noAPI() {
+                        const res = await axios.delete(`/noAPI`, {
+                            params: {
+                                id: ' 1'
+                            }
+                        });
                         console.log('res', res);
                     }
                 },
