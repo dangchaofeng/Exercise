@@ -1,6 +1,6 @@
-# koa-exercise
-Exercise Koa2
+# Exercise
 
- - 简单创建自己的本地服务及路由
- - 练习解析的中间件
- - 了解学习鉴权相关内容
+```
+个人练习使用，每个目录为不同的skill，里面有针对技能的readme.md
+
+```

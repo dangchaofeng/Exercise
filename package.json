@@ -9,7 +9,7 @@
     "koa2": "^2.0.0-alpha.7"
   },
   "devDependencies": {
-    "mongoose": "^5.11.10"
+    "mongoose": "^5.11.11"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
