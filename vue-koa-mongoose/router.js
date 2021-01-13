@@ -3,12 +3,11 @@
  * @Description: 定义路由
  * @Date: 2021-01-13 11:20:02
  * @LastEditors: Adam Dang
- * @LastEditTime: 2021-01-13 11:20:03
+ * @LastEditTime: 2021-01-13 20:32:36
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const Qs = require('qs');
 const { User } = require('./model');
 
 router.get('/vue/table', async (ctx, next) => {
