@@ -1,0 +1,283 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.9.4/qs.js"></script>
+
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+        <style>
+            #app {
+                width: 80%;
+                margin: 50px auto;
+            }
+            .clearfix {
+                overflow: hidden;
+            }
+            .clearfix :after {
+                width: 0;
+                content: '';
+                visibility: hidden;
+                clear: both;
+                display: block;
+            }
+            .right-search-input {
+                float: right;
+                margin-bottom: 15px;
+            }
+
+            .table-button-group {
+                margin-bottom: 15px;
+            }
+            .table-container {
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="app">
+            <div class="clearfix">
+                <div class="right-search-input">
+                    <el-input
+                        placeholder="请输入名称进行搜索"
+                        v-model="name"
+                        clearable
+                        @change="_getTableDataFun"
+                    ></el-input>
+                </div>
+            </div>
+
+            <div class="table-button-group">
+                <el-row>
+                    <el-button size="small" round @click="openDialog('add')">新增</el-button>
+                    <el-button size="small" round @click="deleteBatch">删除</el-button>
+                </el-row>
+            </div>
+
+            <div class="table-container">
+                <el-table
+                    :data="tableData"
+                    tooltip-effect="dark"
+                    stripe
+                    style="width: 100%"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+                    <el-table-column prop="age" label="年龄" width="180"></el-table-column>
+                    <el-table-column prop="address" label="地址"></el-table-column>
+                    <el-table-column label="操作" width="200">
+                        <template slot-scope="scope">
+                            <el-button
+                                @click="openDialog('view',scope.row)"
+                                type="text"
+                                size="small"
+                            >
+                                查看
+                            </el-button>
+                            <el-button
+                                @click="openDialog('edit', scope.row)"
+                                type="text"
+                                size="small"
+                            >
+                                编辑
+                            </el-button>
+                            <el-button @click="deleteFun(scope.row)" type="text" size="small">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+
+            <el-dialog
+                v-if="dialogVisible"
+                :title="title"
+                :visible.sync="dialogVisible"
+                width="30%"
+                center
+            >
+                <div>
+                    <el-form
+                        :model="ruleForm"
+                        :rules="rules"
+                        ref="ruleForm"
+                        label-width="60px"
+                        class="demo-ruleForm"
+                    >
+                        <el-form-item label="姓名" prop="name">
+                            <el-input
+                                v-model="ruleForm.name"
+                                :readonly="ctrl === 'view'"
+                            ></el-input>
+                        </el-form-item>
+                        <el-form-item label="年龄" prop="age">
+                            <el-input
+                                v-model.number="ruleForm.age"
+                                :readonly="ctrl === 'view'"
+                            ></el-input>
+                        </el-form-item>
+                        <el-form-item label="地址" prop="address">
+                            <el-input
+                                v-model="ruleForm.address"
+                                :readonly="ctrl === 'view'"
+                            ></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        multipleSelection: [],
+                        title: '新增',
+                        dialogVisible: false,
+                        name: '',
+                        tableData: [],
+                        ctrl: 'add',
+                        // form
+                        ruleForm: {
+                            _id: '',
+                            name: '',
+                            age: '',
+                            address: ''
+                        },
+                        // 规则校验
+                        rules: {
+                            name: [
+                                { required: true, message: '请输入姓名', trigger: 'blur' },
+                                {
+                                    min: 2,
+                                    max: 4,
+                                    message: '请输入长度在 2 到 4 个字符',
+                                    trigger: 'blur'
+                                }
+                            ],
+                            age: [
+                                { required: true, message: '请输入年龄', trigger: 'change' },
+                                {
+                                    type: 'number',
+                                    min: 0,
+                                    max: 120,
+                                    message: '年龄必须为数字，0-120之间',
+                                    trigger: 'change'
+                                }
+                            ],
+                            address: [
+                                {
+                                    type: 'string',
+                                    required: false,
+                                    max: 30,
+                                    message: '地址过长，不能超过30字',
+                                    trigger: 'change'
+                                }
+                            ]
+                        }
+                    };
+                },
+                mounted() {
+                    this._getTableDataFun();
+                },
+                methods: {
+                    async _getTableDataFun() {
+                        const { data } = await axios.get(`/vue/table`, {
+                            params: {
+                                name: this.name
+                            }
+                        });
+
+                        this.tableData = data.status ? data.data : [];
+                    },
+                    /**
+                     * @author Adam Dang
+                     * @param {*} op 操作类型
+                     * @param {*} row 当前行的数据内容
+                     * @description 打开表格详细弹窗，根据不同的操作展示不同的内容
+                     * @return {*} none
+                     */
+                    openDialog(op, row) {
+                        this.readonly = false;
+                        switch (op) {
+                            case 'add':
+                                this.title = '新增';
+                                this.ctrl = 'add';
+                                break;
+                            case 'view':
+                                this.title = '详情';
+                                this.ruleForm = Object.assign({}, row);
+                                this.ctrl = 'view';
+                                break;
+                            case 'edit':
+                                this.title = '编辑';
+                                this.ruleForm = { ...row };
+                                this.ctrl = 'edit';
+                                break;
+                            default:
+                                break;
+                        }
+                        this.dialogVisible = true;
+                    },
+                    submitForm(formName) {
+                        this.$refs[formName].validate(valid => {
+                            if (valid) {
+                                if (this.ctrl === 'add') {
+                                    this.addFun();
+                                } else {
+                                    this.updateFun();
+                                }
+                                this.dialogVisible = false;
+                            } else {
+                                console.log('error submit!!');
+                                return false;
+                            }
+                        });
+                    },
+                    handleSelectionChange(val) {
+                        this.multipleSelection = val;
+                        console.log(val);
+                    },
+                    async addFun() {
+                        await axios.post('/vue/table', {
+                            ...this.ruleForm
+                        });
+                        this._getTableDataFun();
+                    },
+                    async updateFun() {
+                        await axios.put('/vue/table', {
+                            ...this.ruleForm
+                        });
+                        this._getTableDataFun();
+                    },
+                    async deleteFun(row) {
+                        await axios.delete('/vue/table', {
+                            data: {
+                                _id: row._id
+                            }
+                        });
+                        this._getTableDataFun();
+                    },
+                    async deleteBatch() {
+                        const idArr = this.multipleSelection.map(item => item._id);
+
+                        await axios.delete('/vue/table', {
+                            data: {
+                                _id: idArr
+                            }
+                        });
+                        this._getTableDataFun();
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
