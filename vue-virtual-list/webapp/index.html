@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+        <script src="./static/vue.js"></script>
+        <script src="./static/axios.min.js"></script>
+
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="./static/element.css" />
+        <style>
+            #app {
+                width: 80%;
+                margin: 50px auto;
+            }
+            .list-view {
+                width: 400px;
+                height: 400px;
+                overflow: auto;
+                position: relative;
+                border: 1px solid #c1c1c1;
+                box-shadow: 3px 3px 5px #ccc;
+            }
+
+            .list-view-phantom {
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                z-index: -1;
+            }
+
+            .list-view-content {
+                left: 0;
+                right: 0;
+                top: 0;
+                position: absolute;
+            }
+
+            .list-view-item {
+                padding: 6px;
+                color: #999;
+                line-height: 30px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="app">
+            <div class="list-view" ref="container" @scroll="handleScroll">
+                <div
+                    class="list-view-phantom"
+                    ref="clientHeight"
+                    :style="{ height: contentHeight + 'px' }"
+                ></div>
+                <ul ref="content" class="list-view-content">
+                    <li
+                        class="list-view-item"
+                        :style="{ height: itemHeight + 'px' }"
+                        :key="index"
+                        v-for="(val, index) in list"
+                    >
+                        {{ val }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script src="./static/element.js"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                computed: {
+                    contentHeight() {
+                        // 计算滚动条高度
+                        return this.data.length * (this.itemHeight + 12);
+                    }
+                },
+
+                mounted() {
+                    this.getData();
+                    this.update();
+                },
+
+                data() {
+                    return {
+                        data: [], // 总数据
+                        itemHeight: 30, // 单个高度
+                        list: [] // 渲染数据
+                    };
+                },
+
+                methods: {
+                    update(scrollTop = 0) {
+                        // 获取当前可展示数量
+                        const count = Math.ceil(
+                            this.$refs.container.clientHeight / (this.itemHeight + 12)
+                        );
+                        // 取得可见区域的起始数据索引
+                        const start = Math.floor(scrollTop / (this.itemHeight + 12));
+                        // 取得可见区域的结束数据索引
+                        const end = start + count;
+
+                        // 计算出可见区域对应的数据，让 Vue.js 更新
+                        this.list = this.data.slice(start, end);
+
+                        // 把可见区域的 top 设置为起始元素在整个列表中的位置（使用 transform 是为了更好的性能）
+                        this.$refs.content.style.transform = `translateY(${
+                            start * (this.itemHeight + 12)
+                        }px)`;
+                    },
+                    handleScroll(e) {
+                        // 获取当前滚动条滚动位置
+                        const scrollTop = this.$refs.container.scrollTop;
+                        this.update(scrollTop);
+                    },
+                    getData() {
+                        //创建模拟数据
+                        let data = [];
+                        for (let i = 0; i < 100000; i++) {
+                            data.push(`第 ${i} 个数据`);
+                        }
+                        this.data = [...data];
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
