@@ -30,8 +30,6 @@
             .table-button-group {
                 margin-bottom: 15px;
             }
-            .table-container {
-            }
         </style>
     </head>
 
@@ -58,8 +56,11 @@
             <div class="table-container">
                 <el-table
                     :data="tableData"
+                    v-loading="loading"
                     tooltip-effect="dark"
                     stripe
+                    height="265"
+                    border
                     style="width: 100%"
                     @selection-change="handleSelectionChange"
                 >
@@ -138,6 +139,7 @@
                 el: '#app',
                 data() {
                     return {
+                        loading: false,
                         multipleSelection: [],
                         title: '新增',
                         dialogVisible: false,
@@ -189,12 +191,13 @@
                 },
                 methods: {
                     async _getTableDataFun() {
+                        this.loading = true;
                         const { data } = await axios.get(`/vue/table`, {
                             params: {
                                 name: this.name
                             }
                         });
-
+                        this.loading = false;
                         this.tableData = data.status ? data.data : [];
                     },
                     /**
