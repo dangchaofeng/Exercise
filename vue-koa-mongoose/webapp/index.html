@@ -193,13 +193,18 @@
                 methods: {
                     async _getTableDataFun() {
                         this.loading = true;
-                        const { data } = await axios.get(`/vue/table`, {
-                            params: {
-                                name: this.name
-                            }
-                        });
+                        try {
+                            const { data } = await axios.get(`/vue/table`, {
+                                params: {
+                                    name: this.name
+                                }
+                            });
+                            this.tableData = data.status ? data.data : [];
+                            console.log(123);
+                        } catch (error) {
+                            console.log('err');
+                        }
                         this.loading = false;
-                        this.tableData = data.status ? data.data : [];
                     },
                     /**
                      * @author Adam Dang

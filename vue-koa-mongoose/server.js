@@ -23,6 +23,14 @@ db.connect();
 // 引入解析body中间件(post,put请求会用到)
 const koaBody = require('koa-body');
 
+// 错误监听
+app.on('error', (err, ctx) => {
+    console.error(err);
+    ctx.body = {
+        status: false
+    };
+});
+
 // 启用中间件
 app.use(koaBody({ strict: false }));
 app.use(staticSource);

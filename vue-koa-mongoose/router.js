@@ -14,10 +14,11 @@ router.get('/vue/table', async (ctx, next) => {
     const { name } = ctx.query;
     console.log('params-name', name);
     const list = await User.find(name ? { name } : {});
-    ctx.body = {
-        status: true,
-        data: list
-    };
+    // ctx.body = {
+    //     status: true,
+    //     data: list
+    // };
+    ctx.throw(500);
 });
 
 router.post('/vue/table', async (ctx, next) => {
