@@ -1,16 +1,14 @@
 <!--
  * @Author: Adam Dang
- * @Description: 
+ * @Description: 自己练习， 区别参考样例中的是： 
+ *               vue屏幕闪烁问题解决【v-cloak相关】；
+ *               translate 偏移时使用 scrollTop 的高度，保证内容区的偏移和滚动条完全一致；
+ *               count计算的时候，连同padding的高度一起计算；
+ *               handleScroll 方法中，直接使用原生e.target.scrollTop，减少DOM的二次查找；
+ *               避免count的多次计算，在mounted 生命周期中计算好，后面只调用该值即可；
  * @Date: 2021-01-15 13:41:25
  * @LastEditors: Adam Dang
  * @LastEditTime: 2021-01-15 17:30:38
--->
-<!--
- * @Author: Adam Dang
- * @Description: 
- * @Date: 2021-01-15 13:41:25
- * @LastEditors: Adam Dang
- * @LastEditTime: 2021-01-15 17:30:32
 -->
 <html>
     <head>
@@ -55,6 +53,9 @@
                 line-height: 30px;
                 padding: 6px;
             }
+            ul {
+                margin: 0;
+            }
         </style>
     </head>
 
@@ -63,8 +64,16 @@
             <div class="list-wrap" ref="container" @scroll="handleScroll">
                 <div class="list-platform" :style="{ height: realHeight + 'px' }"></div>
                 <div class="list-body" ref="content">
-                    <ul v-for="(item, index) in list">
-                        <li class="list-item" key="index" v-cloak :height="itemHeight">{{item}}</li>
+                    <ul>
+                        <li
+                            v-for="(item, index) in list"
+                            class="list-item"
+                            :key="index"
+                            v-cloak
+                            :height="itemHeight"
+                        >
+                            {{item}}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -120,13 +129,15 @@
                      * @author Adam Dang
                      * @param {*} scrollTop
                      * @description 根据当前的scrollTop计算数据的起始索引，终止索引，然后更新数据
-                     * @return {*}
                      */
                     update(scrollTop = 0) {
                         const startIndex = Math.floor(scrollTop / (this.itemHeight + 12));
                         const endIndex = startIndex + this.count;
                         this.list = this.data.slice(startIndex, endIndex);
-                        // this.$ref.content.
+                        this.$refs.content.style.transform = `translateY(${
+                            // startIndex * (this.itemHeight + 12)
+                            scrollTop
+                        }px)`;
                     }
                 }
             });
