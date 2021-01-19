@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>react-virtual-list</title>
+        <style>
+            #app {
+                width: 50%;
+                margin: 0 auto;
+            }
+            .list-wrap {
+                position: relative;
+                height: 300px;
+                width: 100%;
+                overflow: auto;
+            }
+
+            .list-platform {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background-color: red;
+                z-index: -1;
+            }
+
+            .list-body {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background-color: yellow;
+            }
+
+            .list-item {
+                line-height: 30px;
+                padding: 6px;
+            }
+            ul {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div id="react-container"></div>
+        </div>
+
+        <!-- 加载 React。-->
+        <!-- 注意: 部署时，将 "development.js" 替换为 "production.min.js"。-->
+        <script src="./static/react.production.min.js"></script>
+        <script src="./static/react-dom.production.min.js"></script>
+
+        <!-- 使用JSX -->
+        <script src="./static/babel.min.js"></script>
+        <script type="text/babel">
+            class Table extends React.Component {
+                constructor(props) {
+                    super(props);
+                    this.container = React.createRef();
+                    this.platform = React.createRef();
+                    this.content = React.createRef();
+                    this.state = {
+                        itemHeight: 30,
+                        tableData: [],
+                        list: ['a', 'b', 'c']
+                    };
+                }
+
+                handleScroll = e => {
+                    const scrollTop = e.target.scrollTop;
+                    console.log(scrollTop, 'scrollTop');
+                    this.update(scrollTop);
+                };
+
+                update = async (scrollTop = 0) => {
+                    const count = Math.ceil(
+                        this.container.current.clientHeight / (this.state.itemHeight + 12)
+                    );
+                    const startIndex = Math.floor(scrollTop / (this.state.itemHeight + 12));
+                    const endIndex = startIndex + count;
+                    await this.setState({
+                        list: this.state.tableData.slice(startIndex, endIndex)
+                    });
+                    this.content.current.style.transform = `translateY(${scrollTop}px)`;
+                };
+
+                getData = async () => {
+                    //创建模拟数据
+                    let data = [];
+                    for (let i = 0; i < 100000; i++) {
+                        data.push(`第 ${i} 个数据`);
+                    }
+                    await this.setState({ tableData: [...data] });
+                    console.log(this.state.tableData);
+                    this.platform.current.style.height = `${
+                        data.length * (this.state.itemHeight + 12)
+                    }px`;
+                    console.log(this.platform.current.style.height);
+                    this.update();
+                };
+
+                componentDidMount() {
+                    this.getData();
+                }
+
+                render() {
+                    const liTags = this.state.list.map(item => (
+                        <li className="list-item" key={item}>
+                            {item}
+                        </li>
+                    ));
+                    return (
+                        <div
+                            className="list-wrap"
+                            ref={this.container}
+                            onScroll={e => {
+                                this.handleScroll(e);
+                            }}
+                        >
+                            <div className="list-platform" ref={this.platform}></div>
+                            <div className="list-body" ref={this.content}>
+                                <ul>{liTags}</ul>
+                            </div>
+                        </div>
+                    );
+                }
+            }
+            const domContainer = document.querySelector('#react-container');
+            ReactDOM.render(React.createElement(Table), domContainer);
+        </script>
+    </body>
+</html>
