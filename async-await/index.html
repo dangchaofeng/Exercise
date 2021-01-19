@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+        <style>
+            /* .cube-btn {
+            margin: 10px 0;
+        } */
+        </style>
+    </head>
+
+    <body>
+        <div id="app">
+            <div>{{name}}</div>
+            <button @click="clickFun">getData</button>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        name: 'dangchaofeng',
+                        age: '28'
+                    };
+                },
+                methods: {
+                    getDataFun() {
+                        return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                resolve('111');
+                            }, 2000);
+                        });
+                    },
+                    async clickFun(e) {
+                        console.log(e.currentTarget, 'first');
+                        await this.getDataFun();
+                        console.log(e.currentTarget, 'argument');
+                    }
+                },
+                mounted: function () {}
+            });
+        </script>
+    </body>
+</html>
