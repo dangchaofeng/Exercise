@@ -29,8 +29,6 @@ module.exports = function (grunt) {
         }
     }
 
-    grunt.loadNpmTasks('@sap/grunt-sapui5-bestpractice-build');
-
     // Load task functions
     const taskConfigurations = loadTasks('./tasks/config');
     const registerDefinitions = loadTasks('./tasks/register');

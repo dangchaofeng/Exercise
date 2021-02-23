@@ -13,79 +13,40 @@
  * For usage docs see:
  * 		https://github.com/gruntjs/grunt-contrib-copy
  */
-const {
-    TMP_DIR_DBG,
-    WEB_APP_DIR,
-    TMP_DIR_BABEL,
-    TMP_DIR,
-    TARGET_DIR,
-    DWC_TARGET_DIR
-} = require('../variable');
+const { WEB_APP_DIR, TMP_DIR_BABEL, TARGET_DIR } = require('../variable');
 module.exports = function (grunt) {
     grunt.config.merge({
         copy: {
-            copyToDbg: {
+            copyToDist: {
                 files: [
                     {
                         expand: true,
                         src: ['**/*.js', '!static/*.js', '!test/**/*'],
-                        dest: TMP_DIR_DBG,
+                        dest: TARGET_DIR,
                         cwd: TMP_DIR_BABEL
                     },
                     {
                         expand: true,
                         src: 'static/*.js',
-                        dest: TMP_DIR_DBG,
+                        dest: TARGET_DIR,
                         cwd: WEB_APP_DIR
                     },
                     {
                         expand: true,
                         src: '**/*.css',
-                        dest: TMP_DIR_DBG,
-                        cwd: WEB_APP_DIR
-                    }
-                ]
-            },
-            copyToTmp: {
-                files: [
-                    {
-                        expand: true,
-                        src: ['**/*.js', '!static/*.js', '!test/**/*'],
-                        dest: TMP_DIR,
-                        cwd: TMP_DIR_BABEL
-                    },
-                    {
-                        expand: true,
-                        src: 'static/*.js',
-                        dest: TMP_DIR,
-                        cwd: WEB_APP_DIR
-                    },
-                    {
-                        expand: true,
-                        src: '**/*.css',
-                        dest: TMP_DIR,
+                        dest: TARGET_DIR,
                         cwd: WEB_APP_DIR
                     },
                     {
                         expand: true,
                         src: ['**/*', '!**/*.js', '!**/*.css', '!test/**/*'],
-                        dest: TMP_DIR,
+                        dest: TARGET_DIR,
                         cwd: WEB_APP_DIR
-                    }
-                ]
-            },
-            copyToDeploy: {
-                files: [
-                    {
-                        expand: true,
-                        src: ['**/*'],
-                        dest: DWC_TARGET_DIR,
-                        cwd: TARGET_DIR
                     }
                 ]
             }
         }
     });
 
-    //   grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 };

@@ -5,8 +5,7 @@ module.exports = function (grunt) {
         'clean:build',
         'babel',
         'browserify',
-        'build',
-        'clean:cleanBabel',
-        'copy:copyToDeploy'
+        'copy:copyToDist',
+        'clean:cleanBabel'
     ]);
 };
