@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "target": "es5",
+        "sourceMap": true,
+        "noEmit": false,
+        "downlevelIteration": true,
+        "checkJs": false,
+        "allowJs": false,
+        "lib": ["dom", "es5", "es2016"]
+    },
+    "include": ["./webapp/**/*.ts", "./typings/**/*.ts"],
+    "exclude": ["./node_modules/**/*"]
+}

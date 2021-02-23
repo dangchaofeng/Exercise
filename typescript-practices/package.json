@@ -1,0 +1,16 @@
+{
+    "name": "typescript-practices",
+    "version": "1.0.0",
+    "description": "",
+    "main": "greeter.js",
+    "scripts": {
+        "tsc": "tsc -p tsconfig.json",
+        "watch": "tsc -p tsconfig.json --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^4.1.5"
+    }
+}
