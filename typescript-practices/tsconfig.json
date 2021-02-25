@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "none",
+        "module": "AMD",
         "target": "es5",
         "sourceMap": true,
         "noEmit": false,

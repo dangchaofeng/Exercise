@@ -5,7 +5,6 @@
  * @LastEditors: Adam Dang
  * @LastEditTime: 2021-02-23 17:56:18
  */
-
 (() => {
     // ? 接口初探
     // * 基础写法
@@ -195,4 +194,15 @@
     // class Image implements SelectableControl {
     //     select() {}
     // }
+})();
+
+(() => {
+    console.log(123);
+    class Student implements d.cf.Person {
+        // private id: string;
+        constructor(private id: string, public name: string, public age: number) {}
+    }
+    const a: Student = new Student('1', 'dangchaofeng', 28);
+    console.log('age', a.age);
+    console.log('name', a.name);
 })();
