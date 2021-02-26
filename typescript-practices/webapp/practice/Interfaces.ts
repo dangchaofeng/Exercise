@@ -196,6 +196,8 @@
     // }
 })();
 
+// * 对应声明文件中的export来使用
+import AliasMan = d.cf.Man;
 (() => {
     console.log(123);
     class Student implements d.cf.Person {
@@ -205,4 +207,11 @@
     const a: Student = new Student('1', 'dangchaofeng', 28);
     console.log('age', a.age);
     console.log('name', a.name);
+
+    class Boy implements AliasMan {
+        constructor(public name: string, public age: number) {}
+    }
+
+    const boy: Boy = new Boy('peng', 1);
+    console.log(boy.name);
 })();

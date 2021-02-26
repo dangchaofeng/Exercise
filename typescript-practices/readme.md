@@ -12,5 +12,5 @@
 4. webpack集成
 
 5. 本地调试运行可以直接使用ts-node 来运行ts文件
-    > 如果报错找不到声明文件中的namespace，则需要在tsconfig.json那一层调用命令： `ts-node *.ts --files `
+    > 如果报错找不到声明文件中的namespace，则需要在tsconfig.json那一层调用命令： `ts-node --files *.ts`
 
