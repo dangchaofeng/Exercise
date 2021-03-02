@@ -3,7 +3,7 @@
  * @Description: 函数 【参数定义类型】 【函数返回值定义类型】 【直接函数定义类型】 【可选参数】 【参数默认值】 【箭头函数】 【重载函数】
  * @Date: 2021-02-25 10:16:06
  * @LastEditors: Adam Dang
- * @LastEditTime: 2021-02-25 10:16:07
+ * @LastEditTime: 2021-03-02 14:05:53
  */
 
 // ? 为函数定义类型
@@ -55,7 +55,7 @@
     function pickCard(x: { suit: string; card: number }[]): number;
     function pickCard(x: number): { suit: string; card: number };
     // * 重载实现函数
-    function pickCard(x): any {
+    function pickCard(x: any): any {
         // Check to see if we're working with an object/array
         // if so, they gave us the deck and we'll pick the card
         if (typeof x == 'object') {

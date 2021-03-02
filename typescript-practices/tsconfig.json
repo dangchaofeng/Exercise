@@ -1,13 +1,16 @@
 {
     "compilerOptions": {
-        "module": "AMD",
+        "module": "es6",
         "target": "es5",
         "sourceMap": true,
         "noEmit": false,
         "downlevelIteration": true,
         "checkJs": false,
-        "allowJs": false,
-        "lib": ["dom", "es5", "es2016"]
+        "allowJs": true,
+        "lib": ["dom", "es5", "es2016"],
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "types": ["webpack-env"]
     },
     "include": ["./webapp/**/*.ts", "./typings/**/*.ts"],
     "exclude": ["./node_modules/**/*"]

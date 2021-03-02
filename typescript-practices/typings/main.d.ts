@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-declare const axios;
-declare const jQuery;
-declare const $;
+declare const axios: any;
+declare const jQuery: any;
+declare const $: any;
 
 declare namespace d {
     namespace cf {
