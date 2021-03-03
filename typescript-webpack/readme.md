@@ -41,20 +41,8 @@
               new webpack.ProgressPlugin(),
               new CleanWebpackPlugin(),
               // copy 迁移静态资源
-              new CopyWebpackPlugin({
-                  patterns: [
-                      {
-                          from: path.resolve(__dirname, 'webapp', 'public'),
-                          to: path.resolve(__dirname, 'dist', 'public')
-                      }
-                  ]
-              }),
-              new HtmlWebpackPlugin({
-                  template: './webapp/index.html',
-                  title: 'typescript-webpack', // * 同时，在模板中的title标签中配置模板语法
-                  cache: false,
-                  favicon: path.resolve(__dirname, './webapp/public/favicon.ico')
-              })
+              new CopyWebpackPlugin({}),
+              new HtmlWebpackPlugin({})
               // new HardSourceWebpackPlugin() // * 优化，资源缓存，除了第一次，后续打包效率加快 【webpack5 当前有bug 2021-03-03】
           ],
           resolve: {
@@ -67,12 +55,7 @@
               usedExports: true,
               // 提取公共代码出来
               splitChunks: {
-                  chunks: 'all',
-                  cacheGroups: {
-                      defaultVendors: {
-                          filename: 'vendors.[hash:8].js'
-                      }
-                  }
+                  chunks: 'all'
               }
           }
       };
