@@ -1,5 +1,5 @@
-import { b } from './src/greeter';
-import './css/index.css';
+import { b } from './greeter';
+import './assets/less/index.less';
 console.log(b, 'ccc');
 Object.assign({}, { a: 1 });
 (async () => {

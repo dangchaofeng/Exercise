@@ -8,16 +8,81 @@
     
 > tsconfig.json
     
-3. 集成polyfill练习
+3. 本地调试运行可以直接使用ts-node 来运行ts文件
     
-> 默认tsc转换是转义语法了的，但是polyfill：得靠自己想办法填充垫片
+> 如果报错找不到声明文件中的namespace，则需要在tsconfig.json那一层调用命令： `ts-node --files *.ts`
     
-4. webpack集成
+4. webpack集成， ts编译， babel-polyfill的增加集成
     - base 环境
+    
+      ```js
+      {
+      // 入口， 推荐使用对象
+          entry: { },
+          // 输出配置
+          output: { },
+          // 模块处理
+          module: {
+              rules: [
+                  // * 第一： 最重要的是给自己的js、ts、jsx等配置loader,babel,polyfill
+      
+                  // * 第二： 其次给自己的less/sass等样式等配置loader
+      
+                  // * 第三： 还有给自己默认的css配置loader处理解析
+                  
+                  // * 第四： 给img配置url-loader处理
+                  
+                  // * 最后： 给字体图标资源配置file-loader处理， 会分离出字体文件
+                  
+              ]
+          },
+          // webpack 插件
+          plugins: [
+              new webpack.ProgressPlugin(),
+              new CleanWebpackPlugin(),
+              // copy 迁移静态资源
+              new CopyWebpackPlugin({
+                  patterns: [
+                      {
+                          from: path.resolve(__dirname, 'webapp', 'public'),
+                          to: path.resolve(__dirname, 'dist', 'public')
+                      }
+                  ]
+              }),
+              new HtmlWebpackPlugin({
+                  template: './webapp/index.html',
+                  title: 'typescript-webpack', // * 同时，在模板中的title标签中配置模板语法
+                  cache: false,
+                  favicon: path.resolve(__dirname, './webapp/public/favicon.ico')
+              })
+              // new HardSourceWebpackPlugin() // * 优化，资源缓存，除了第一次，后续打包效率加快 【webpack5 当前有bug 2021-03-03】
+          ],
+          resolve: {
+              extensions: ['.tsx', '.ts', '.js']
+          },
+          // 优化属性
+          optimization: {
+              moduleIds: 'named',
+              // treeshaking【树摇】， 将定义但是没有引用的export在打包的时候删除, 同时需要在package.json中提供sideEffects属性，false or ['*.css', '*.less']
+              usedExports: true,
+              // 提取公共代码出来
+              splitChunks: {
+                  chunks: 'all',
+                  cacheGroups: {
+                      defaultVendors: {
+                          filename: 'vendors.[hash:8].js'
+                      }
+                  }
+              }
+          }
+      };
+      ```
+    
+      
     
     - `.babelrc` 文件
     
-  ```ASN.1
+      ```ASN.1
       // babel转义配置，此配置按需引入polyfill
       // npm i @babel/core @babel/polyfill @babel/preset-env core-js -D
       {
@@ -58,98 +123,45 @@
       };
       ```
     
-      
+    - `tsconfig.json` 文件， webpack-env是为了解决一些变量不存在的报错引入的【module.hot】
     
-    - `webpack.dev.js`文件
-    
-      ```js
-      // webpack 开发配置文件
-      const path = require('path');
-      const webpack = require('webpack');
-      const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-      const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-      const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-      const HtmlWebpackPlugin = require('html-webpack-plugin');
-      
-      const devMode = process.env.NODE_ENV !== 'production';
-      module.exports = {
-          mode: 'development',
-          target: devMode ? 'web' : 'browserslist',
-          entry: './webapp/index.ts',
-          devtool: 'cheap-module-eval-source-map',
-          output: {
-              filename: '[name]_[hash:8].js',
-              path: path.resolve(__dirname, './dist')
+      ```json
+      {
+          "compilerOptions": {
+              "module": "es6",
+              "target": "es5",
+              "sourceMap": true,
+              "noEmit": false,
+              "downlevelIteration": true,
+              "checkJs": false,
+              "allowJs": true,
+              "lib": ["dom", "es5", "es2016"],
+              "allowSyntheticDefaultImports": true,
+              "noImplicitAny": true,
+              "types": ["webpack-env"]
           },
-          plugins: [
-              new webpack.ProgressPlugin(),
-              new MiniCssExtractPlugin(),
-              new CleanWebpackPlugin(),
-              new HtmlWebpackPlugin({
-                  template: './webapp/index.html',
-                  title: 'typescript-webpack',
-                  cache: false
-              }),
-              new webpack.HotModuleReplacementPlugin()
-              // new HardSourceWebpackPlugin(), webpack5 有问题
+          "include": ["./webapp/**/*.ts", "./typings/**/*.ts"],
+          "exclude": ["./node_modules/**/*"]
+      }
+      
+      ```
+    
+    - `package.json` 文件， 此部分较重要的内容
+    
+      ```json
+      {
+          "scripts": {
+              "build": "webpack --env production --config ./webpack.common.js",
+              "dev": "webpack serve --config ./webpack.common.js"
+          },
+      	"sideEffects": [
+              "*.css",
+              "*.less",
+              "@babel/polyfill"
           ],
-      
-          module: {
-              rules: [
-                  {
-                      test: /\.(ts|tsx)$/,
-                      use: [
-                          {
-                              loader: 'babel-loader'
-                          },
-                          {
-                              loader: 'ts-loader',
-                              options: {
-                                  transpileOnly: false
-                              }
-                          }
-                      ],
-                      exclude: [path.resolve(__dirname, 'node_modules')]
-                  },
-                  {
-                      test: /\.css$/,
-                      use: [
-                          devMode ? { loader: 'style-loader' } : MiniCssExtractPlugin.loader,
-                          {
-                              loader: 'css-loader',
-                              options: {
-                                  sourceMap: true
-                              }
-                          },
-                          {
-                              loader: 'postcss-loader'
-                          }
-                      ]
-                  }
-              ]
-          },
-      
-          resolve: {
-              extensions: ['.tsx', '.ts', '.js']
-          },
-      
-          devServer: {
-              open: true,
-              host: 'localhost',
-              port: 8080,
-              contentBase: './dist',
-              hot: true
-          },
-          optimization: {
-              moduleIds: 'named'
-          }
-      };
-      
+      }
       ```
     
       
     
-5. 本地调试运行可以直接使用ts-node 来运行ts文件
-    
-    > 如果报错找不到声明文件中的namespace，则需要在tsconfig.json那一层调用命令： `ts-node --files *.ts`
 
