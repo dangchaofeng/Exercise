@@ -23,4 +23,6 @@
         ]
     ]
     ```
+4. @babel/plugin-proposal-decorators 用来编译解析装饰器
 
+5. @babel/plugin-proposal-class-properties 用来编译解析class中的静态属性。从Babel v7开始，所有的stage预设都已经弃用了。想要转换预设提案语法，就得安装必要的plugin
