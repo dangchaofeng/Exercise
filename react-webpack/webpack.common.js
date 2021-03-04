@@ -11,8 +11,7 @@ const prodConfig = require('./webpack.prod');
 const commonConfig = {
     // 入口， 推荐使用对象
     entry: {
-        index: './webapp/src/index.ts'
-        // practice: './webapp/practice/*.ts'
+        index: './webapp/src/index.js'
     },
     // 输出配置
     output: {
@@ -30,8 +29,8 @@ const commonConfig = {
         rules: [
             // * 第一： 最重要的是给自己的js、ts、jsx等配置loader,babel,polyfill
             {
-                test: /\.(ts|tsx)$/,
-                use: ['babel-loader', 'ts-loader'],
+                test: /\.(js|jsx)$/,
+                use: ['babel-loader'],
                 exclude: [path.resolve(__dirname, 'node_modules')]
             },
 
@@ -89,7 +88,7 @@ const commonConfig = {
         }),
         new HtmlWebpackPlugin({
             template: './webapp/public/index.html',
-            title: 'typescript-webpack', // * 同时，在模板中的title标签中配置模板语法
+            title: 'react-webpack', // * 同时，在模板中的title标签中配置模板语法
             cache: false,
             favicon: path.resolve(__dirname, './webapp/public/favicon.ico')
         })

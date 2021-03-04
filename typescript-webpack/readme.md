@@ -1,17 +1,17 @@
 # typescript 练习
 
 1. typescript 功能语法练习
-    
+   
 > practice 目录下
-    
+
 2. 编译配置练习
-    
+   
 > tsconfig.json
-    
+
 3. 本地调试运行可以直接使用ts-node 来运行ts文件
-    
+   
 > 如果报错找不到声明文件中的namespace，则需要在tsconfig.json那一层调用命令： `ts-node --files *.ts`
-    
+
 4. webpack集成， ts编译， babel-polyfill的增加集成
     - base 环境
     
@@ -84,6 +84,19 @@
           ]
       }
       
+      // 此处使用的垫片填充没有用@bable-polyfill, 而使用的@babel/plugin-transform-runtime，就不会污染全局。
+          npm i @babel/plugin-transform-runtime -D;  npm i @babel/runtime-corejs3 -S
+          "plugins": [
+              [
+                  "@babel/plugin-transform-runtime",
+                  {
+                      // 配置corejs为3，需要预先安装@babel/runtime-corejs3
+                      // 配置corejs为2，需要预先安装@babel/runtime-corejs2
+                      // 配置corejs为false，需要预先安装@babel/runtime
+                      "corejs": 3
+                  }
+              ]
+          ]
       ```
     
     - `.browserslistrc` 文件
