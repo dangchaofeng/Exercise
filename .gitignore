@@ -3,3 +3,5 @@
 **/dist/
 **/webapps/
 **/build/
+grunt-build/webapp/**/*.js
+grunt-build/webapp/**/*.js.map
