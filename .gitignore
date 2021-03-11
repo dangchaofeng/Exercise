@@ -5,3 +5,4 @@
 **/build/
 grunt-build/webapp/**/*.js
 grunt-build/webapp/**/*.js.map
+**/*cache/
