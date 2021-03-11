@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Loading from './Loading';
 function woof(Comp) {
     return props => {
         console.log(props);
@@ -39,6 +40,17 @@ class Img extends Component {
     name = 'dcf';
     constructor() {
         super();
+        this.state = {
+            src: null
+        };
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+                src: this.props.src
+            });
+        }, 5000);
     }
 
     render() {
@@ -51,9 +63,16 @@ class Img extends Component {
                     this.props.onClick();
                 }}
             >
+                <div>蚂蚁雅黑： {this.props.age}</div>
                 <div className="color">456</div>
                 <div className="divImg"></div>
-                <img width="200" height="200" src="../public/headImg.jpg" alt="" />
+                <div className="imgContainer">
+                    {this.state.src === null ? (
+                        <Loading></Loading>
+                    ) : (
+                        <img src={this.state.src} alt="" />
+                    )}
+                </div>
             </div>
         );
     }

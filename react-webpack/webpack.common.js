@@ -7,7 +7,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const { merge } = require('webpack-merge');
 const devConfig = require('./webpack.dev');
 const prodConfig = require('./webpack.prod');
-
+const analyzeConfig = require('./webpack.analyze');
 const commonConfig = {
     // 入口， 推荐使用对象
     entry: {
@@ -23,6 +23,14 @@ const commonConfig = {
         filename: '[name].[contenthash:8].js',
         path: path.resolve(__dirname, 'dist') // * 必须是绝对路径
         // publicPath: 'www.baidu.com/' // * 一般在prod可能会根据所需设置此属性，它会在所有路径下添加前缀 www.baidu.com 来请求资源
+    },
+    // 缓存机制， webpack5自身支持，不用hardSource
+    cache: {
+        // type: 'memory'
+        type: 'filesystem',
+        store: 'pack' // 当编译器空闲时，将所有缓存项的数据存储在单个文件中
+        // cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+        // cacheLocation: path.resolve(__dirname, '.test_cache')
     },
     // 模块处理
     module: {
@@ -92,7 +100,7 @@ const commonConfig = {
             cache: false,
             favicon: path.resolve(__dirname, './webapp/public/favicon.ico')
         })
-        // new HardSourceWebpackPlugin() // * 优化，资源缓存，除了第一次，后续打包效率加快 【webpack5 当前有bug 2021-03-03】
+        // new HardSourceWebpackPlugin() // * 优化，资源缓存，除了第一次，后续打包效率加快 【webpack5 当前有bug 2021-03-03，使用内部的catch】
     ],
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
@@ -118,9 +126,13 @@ module.exports = env => {
     console.log('mode:', env.production);
     // webpack5 target 默认不是web
     commonConfig.target = env.production ? 'browserslist' : 'web';
-    if (env && env.production) {
-        return merge(commonConfig, prodConfig);
-    } else {
-        return merge(commonConfig, devConfig);
+
+    let config = env.production ? merge(commonConfig, prodConfig) : merge(commonConfig, devConfig);
+
+    // 添加分析
+    if (env.analyze) {
+        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+        config.plugins.push(new BundleAnalyzerPlugin());
     }
+    return config;
 };

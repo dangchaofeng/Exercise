@@ -5,6 +5,7 @@ import Img from './component/Img';
 
 ReactDom.render(
     <Img
+        src="../public/headImg.jpg"
         onClick={() => {
             alert('click');
         }}
