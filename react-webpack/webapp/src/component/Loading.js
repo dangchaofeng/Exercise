@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-
 class Loading extends Component {
     constructor() {
         super();
     }
     render() {
         return (
-            <div className="loadEffect">
-                <span> 加载中</span>
+            <div className="loading">
+                <svg className="icon" aria-hidden="true">
+                    <use xlinkHref="#icon-ic_laoding"></use>
+                </svg>
             </div>
         );
     }

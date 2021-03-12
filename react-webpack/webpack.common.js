@@ -7,7 +7,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const { merge } = require('webpack-merge');
 const devConfig = require('./webpack.dev');
 const prodConfig = require('./webpack.prod');
-const analyzeConfig = require('./webpack.analyze');
 const commonConfig = {
     // 入口， 推荐使用对象
     entry: {
