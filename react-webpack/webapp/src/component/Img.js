@@ -46,11 +46,24 @@ class Img extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
+        const img = document.createElement('img');
+        img.src = this.props.src;
+        img.onload = () => {
+            const data = this.getBase64Image(img);
             this.setState({
-                src: this.props.src
+                src: data
             });
-        }, 5000);
+        };
+    }
+
+    getBase64Image(img) {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var dataURL = canvas.toDataURL('image/png');
+        return dataURL;
     }
 
     render() {

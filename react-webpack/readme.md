@@ -26,3 +26,5 @@
 4. @babel/plugin-proposal-decorators 用来编译解析装饰器
 
 5. @babel/plugin-proposal-class-properties 用来编译解析class中的静态属性。从Babel v7开始，所有的stage预设都已经弃用了。想要转换预设提案语法，就得安装必要的plugin
+
+6. Img 组件中，使用了【代理模式】，没有直接调用img标签，而是交给Img组件，它自己会在图片加载完成之前，先展示loading组件，当img请求加载好了, 转换为base64， 赋值给src，展示img标签。
