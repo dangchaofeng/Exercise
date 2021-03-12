@@ -46,9 +46,11 @@ class Img extends Component {
     }
 
     componentDidMount() {
+        // 组件加载好之后， 进行请求img
         const img = document.createElement('img');
         img.src = this.props.src;
         img.onload = () => {
+            // img请求回来后，将其转换为base64，直接塞进src中
             const data = this.getBase64Image(img);
             this.setState({
                 src: data
