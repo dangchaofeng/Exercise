@@ -12,7 +12,8 @@
     "author": "",
     "sideEffects": [
         "*.css",
-        "*.less"
+        "*.less",
+        "iconfont.js"
     ],
     "license": "ISC",
     "devDependencies": {

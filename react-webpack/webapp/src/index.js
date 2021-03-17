@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import './assets/less/index.less';
+import './assets/icon/iconfont.js';
 import Img from './component/Img';
 
 ReactDom.render(
