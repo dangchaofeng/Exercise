@@ -1,0 +1,23 @@
+{
+  "id": "2414662",
+  "name": "react-webpack",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "591725",
+      "name": "wxb账户",
+      "font_class": "wxbzhanghu",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "16842204",
+      "name": "ic_laoding",
+      "font_class": "ic_laoding",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    }
+  ]
+}

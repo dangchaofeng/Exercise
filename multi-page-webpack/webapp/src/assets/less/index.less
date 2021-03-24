@@ -1,0 +1,44 @@
+
+ @import '../icon/iconfont.css';
+ 
+ .icon {
+    width: 1em; /* 通过设置 font-size 来改变图标大小 */
+    height: 1em;
+    vertical-align: -0.15em;  /* 图标和文字相邻时，垂直对齐 */
+    fill: currentColor; /* 通过设置 color 来改变 SVG 的颜色/fill */
+    overflow: hidden; /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示 normalize.css 中也包含这行 */
+
+  }
+
+
+.loading {
+    width: 100%;
+    height: 100%;
+    display: block;
+    font-size: 50px;
+    color: red;
+    .icon {
+        animation:loading 1s linear infinite running;
+    }
+}
+
+.red {
+    background-color: red;
+}
+
+.gray {
+    background-color: gray;
+}
+
+.blue {
+    background-color: rgb(0, 195, 255);
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+div {
+    width: 100px;
+    height: 100px;
+}
