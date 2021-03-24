@@ -44,7 +44,7 @@ const commonConfig = {
             // * 第二： 其次给自己的less/sass等样式等配置loader
             {
                 test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader']
+                use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
             },
 
             // * 第三： 还有给自己默认的css配置loader处理解析
@@ -59,7 +59,7 @@ const commonConfig = {
                 use: {
                     loader: 'url-loader',
                     options: {
-                        name: '[name]_[hash:8].[ext]',
+                        name: '[name].[contenthash:8].[ext]',
                         outputPath: 'static/images/',
                         limit: 1024 * 15
                     }
@@ -73,7 +73,7 @@ const commonConfig = {
                 use: {
                     loader: 'url-loader',
                     options: {
-                        name: '[hash:10].[ext]',
+                        name: '[contenthash:10].[ext]',
                         outputPath: 'static/font/'
                     }
                 }
@@ -114,7 +114,7 @@ const commonConfig = {
             chunks: 'all',
             cacheGroups: {
                 defaultVendors: {
-                    filename: 'vendors.[hash:8].js'
+                    filename: 'vendors.[contenthash:8].js'
                 }
             }
         }

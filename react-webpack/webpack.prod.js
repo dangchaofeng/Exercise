@@ -8,7 +8,7 @@ const prodConfig = {
             // * 第二： 其次给自己的less/sass等样式等配置loader
             {
                 test: /\.less$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
             },
 
             // * 第三： 还有给自己默认的css配置loader处理解析
@@ -20,7 +20,7 @@ const prodConfig = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].[contenthash:8].css'
+            filename: 'css/index.[contenthash:8].css'
         })
     ]
 };

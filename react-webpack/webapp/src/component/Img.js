@@ -71,8 +71,6 @@ class Img extends Component {
     }
 
     render() {
-        const a = Object.assign({}, { a: 'aaa' });
-        console.log(a);
         return (
             <div className="wrap">
                 <div>蚂蚁雅黑： {this.props.age}</div>

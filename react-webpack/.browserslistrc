@@ -1,4 +1,4 @@
-> 0.5%
-last 2 versions
+> 1%   # 支持市场占有率大于1%的浏览器（世界的）
+last 2 versions # 兼容浏览器最近两个版本
 Firefox ESR
 not dead
